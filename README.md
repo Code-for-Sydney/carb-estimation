@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Carb Estimation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI-powered food analysis application for estimating carbohydrate content and glycemic index using Google Gemini AI.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This repository contains two versions of the application:
 
-## React Compiler
+### 📱 [carb-estimation-mobile](./carb-estimation-mobile)
+React Native mobile app built with Expo
+- iOS and Android support
+- Camera and gallery image picker
+- Native mobile UI/UX
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🌐 [carb-estimation-web](./carb-estimation-web)
+React web application built with Vite
+- Modern web interface
+- Drag-and-drop image upload
+- Responsive design with Tailwind CSS
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 📸 Upload or capture food images
+- 🤖 AI-powered food recognition using Google Gemini
+- 📊 Carbohydrate content estimation
+- 📈 Glycemic Index (GI) analysis
+- 💾 Secure local API key storage
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Mobile App
+```bash
+cd carb-estimation-mobile
+npm install
+npx expo start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Web App
+```bash
+cd carb-estimation-web
+npm install
+npm run dev
 ```
+
+## Requirements
+
+- Node.js (v16 or higher)
+- Google Gemini API Key ([Get one here](https://makersuite.google.com/app/apikey))
+
+## Privacy
+
+Your API key is stored locally and is never sent to any server other than Google's Gemini API for analysis.
+
+## License
+
+For informational purposes only. Always consult with a healthcare professional for medical advice.
