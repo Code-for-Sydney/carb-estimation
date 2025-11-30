@@ -76,6 +76,17 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                         );
                     })}
                 </View>
+
+                {items.length > 1 && (
+                    <View style={styles.totalSection}>
+                        <Text style={styles.totalLabel}>Total Carbohydrates</Text>
+                        <View style={styles.totalValue}>
+                            <Text style={styles.totalCarbs}>
+                                {items.reduce((sum, item) => sum + item.carbs, 0)}g
+                            </Text>
+                        </View>
+                    </View>
+                )}
             </View>
 
             <View style={styles.disclaimer}>
@@ -180,6 +191,28 @@ const styles = StyleSheet.create({
         color: colors.slate[500],
         fontWeight: '600',
         letterSpacing: 0.5,
+    },
+    totalSection: {
+        backgroundColor: colors.emerald[50],
+        borderTopWidth: 2,
+        borderTopColor: colors.emerald[200],
+        padding: spacing.lg,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    totalLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: colors.emerald[700],
+    },
+    totalValue: {
+        alignItems: 'flex-end',
+    },
+    totalCarbs: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: colors.emerald[700],
     },
     disclaimer: {
         flexDirection: 'row',
