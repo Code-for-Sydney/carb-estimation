@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "CarbEstimate AI",
+    "slug": "carb-estimation-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#10b981"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.carbestimate.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to your camera to take photos of food for analysis.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to select food images for analysis."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#10b981"
+      },
+      "package": "com.carbestimate.app",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "This app needs access to your photos to select food images for analysis.",
+          "cameraPermission": "This app needs access to your camera to take photos of food for analysis."
+        }
+      ]
+    ]
+  }
+}
