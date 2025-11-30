@@ -91,7 +91,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <Layout onResetKey={apiKey ? handleResetKey : undefined}>
+      <Layout onResetKey={apiKey ? handleResetKey : undefined} style={styles.status}>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>Analyze Your Meal</Text>
@@ -136,12 +136,15 @@ export default function App() {
             </>
           )}
         </View>
-      </Layout>
+      </Layout >
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  status: {
+    gap: spacing.lg,
+  },
   content: {
     gap: spacing.lg,
   },
