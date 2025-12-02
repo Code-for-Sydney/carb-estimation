@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { FoodItem } from '../types';
 import { colors, spacing, borderRadius } from '../styles/theme';
@@ -9,6 +9,18 @@ interface ResultsDisplayProps {
 }
 
 export function ResultsDisplay({ items }: ResultsDisplayProps) {
+    const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+
+    const toggleExpanded = (index: number) => {
+        const newExpanded = new Set(expandedItems);
+        if (newExpanded.has(index)) {
+            newExpanded.delete(index);
+        } else {
+            newExpanded.add(index);
+        }
+        setExpandedItems(newExpanded);
+    };
+
     const getGiColor = (gi: number) => {
         if (gi < 55) return { text: colors.emerald[600], bg: colors.emerald[50], border: colors.emerald[200] };
         if (gi < 70) return { text: colors.amber[600], bg: colors.amber[50], border: colors.amber[100] };
@@ -39,6 +51,9 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                 <View style={styles.itemsContainer}>
                     {items.map((item, index) => {
                         const giColors = getGiColor(item.gi);
+                        const isExpanded = expandedItems.has(index);
+                        const hasIngredients = item.ingredients && item.ingredients.length > 0;
+
                         return (
                             <View
                                 key={index}
@@ -47,46 +62,69 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                                     index < items.length - 1 && styles.itemBorder,
                                 ]}
                             >
-                                <View style={styles.itemLeft}>
-                                    <Text style={styles.itemName}>{item.name}</Text>
-                                    <View style={styles.badges}>
-                                        <View
-                                            style={[
-                                                styles.badge,
-                                                {
-                                                    backgroundColor: giColors.bg,
-                                                    borderColor: giColors.border,
-                                                },
-                                            ]}
-                                        >
-                                            <Text style={[styles.badgeText, { color: giColors.text }]}>
-                                                GI: {item.gi} ({getGiLabel(item.gi)})
+                                <View style={styles.itemContent}>
+                                    <View style={styles.itemLeft}>
+                                        <Text style={styles.itemName}>{item.name}</Text>
+                                        <View style={styles.badges}>
+                                            <View
+                                                style={[
+                                                    styles.badge,
+                                                    {
+                                                        backgroundColor: giColors.bg,
+                                                        borderColor: giColors.border,
+                                                    },
+                                                ]}
+                                            >
+                                                <Text style={[styles.badgeText, { color: giColors.text }]}>
+                                                    GI: {item.gi} ({getGiLabel(item.gi)})
+                                                </Text>
+                                            </View>
+                                            <Text style={styles.confidence}>
+                                                Confidence: {Math.round(item.confidence * 100)}%
                                             </Text>
                                         </View>
-                                        <Text style={styles.confidence}>
-                                            Confidence: {Math.round(item.confidence * 100)}%
-                                        </Text>
+                                    </View>
+                                    <View style={styles.itemRight}>
+                                        <Text style={styles.carbsValue}>{item.carbs}g</Text>
+                                        <Text style={styles.carbsLabel}>CARBS</Text>
                                     </View>
                                 </View>
-                                <View style={styles.itemRight}>
-                                    <Text style={styles.carbsValue}>{item.carbs}g</Text>
-                                    <Text style={styles.carbsLabel}>CARBS</Text>
-                                </View>
+
+                                {hasIngredients && (
+                                    <>
+                                        <TouchableOpacity
+                                            style={styles.expandButton}
+                                            onPress={() => toggleExpanded(index)}
+                                            activeOpacity={0.7}
+                                        >
+                                            <Ionicons
+                                                name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                                                size={20}
+                                                color={colors.slate[500]}
+                                            />
+                                            <Text style={styles.expandButtonText}>
+                                                {isExpanded ? 'Hide' : 'Show'} Ingredients
+                                            </Text>
+                                        </TouchableOpacity>
+
+                                        {isExpanded && (
+                                            <View style={styles.ingredientsContainer}>
+                                                <Text style={styles.ingredientsTitle}>Ingredient Breakdown</Text>
+                                                {item.ingredients!.map((ingredient, ingredientIndex) => (
+                                                    <View key={ingredientIndex} style={styles.ingredientRow}>
+                                                        <Text style={styles.ingredientName}>{ingredient.name}</Text>
+                                                        <Text style={styles.ingredientCarbs}>{ingredient.carbs}g</Text>
+                                                    </View>
+                                                ))}
+
+                                            </View>
+                                        )}
+                                    </>
+                                )}
                             </View>
                         );
                     })}
                 </View>
-
-                {items.length > 1 && (
-                    <View style={styles.totalSection}>
-                        <Text style={styles.totalLabel}>Total Carbohydrates</Text>
-                        <View style={styles.totalValue}>
-                            <Text style={styles.totalCarbs}>
-                                {items.reduce((sum, item) => sum + item.carbs, 0)}g
-                            </Text>
-                        </View>
-                    </View>
-                )}
             </View>
 
             <View style={styles.disclaimer}>
@@ -140,14 +178,17 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: spacing.lg,
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
         gap: spacing.md,
     },
     itemBorder: {
         borderBottomWidth: 1,
         borderBottomColor: colors.slate[100],
+    },
+    itemContent: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        gap: spacing.md,
     },
     itemLeft: {
         flex: 1,
@@ -192,28 +233,54 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         letterSpacing: 0.5,
     },
-    totalSection: {
-        backgroundColor: colors.emerald[50],
-        borderTopWidth: 2,
-        borderTopColor: colors.emerald[200],
-        padding: spacing.lg,
+    expandButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        gap: spacing.xs,
+        paddingVertical: spacing.sm,
+        paddingHorizontal: spacing.md,
+        backgroundColor: colors.slate[50],
+        borderRadius: borderRadius.md,
+        borderWidth: 1,
+        borderColor: colors.slate[200],
     },
-    totalLabel: {
-        fontSize: 16,
+    expandButtonText: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: colors.slate[600],
+    },
+    ingredientsContainer: {
+        backgroundColor: colors.slate[50],
+        borderRadius: borderRadius.md,
+        padding: spacing.md,
+        gap: spacing.xs,
+        borderWidth: 1,
+        borderColor: colors.slate[200],
+    },
+    ingredientsTitle: {
+        fontSize: 13,
         fontWeight: '600',
-        color: colors.emerald[700],
+        color: colors.slate[700],
+        marginBottom: spacing.xs,
     },
-    totalValue: {
-        alignItems: 'flex-end',
+    ingredientRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: spacing.xs,
+        paddingHorizontal: spacing.sm,
     },
-    totalCarbs: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: colors.emerald[700],
+    ingredientName: {
+        fontSize: 14,
+        color: colors.slate[700],
+        flex: 1,
     },
+    ingredientCarbs: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: colors.slate[900],
+    },
+
     disclaimer: {
         flexDirection: 'row',
         gap: spacing.md,
