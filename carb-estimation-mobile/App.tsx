@@ -73,14 +73,21 @@ export default function App() {
     setError(null);
 
     try {
-      // Process the first image for now (Gemini Multimodal)
-      const imageToAnalyze = selectedImages[0];
-      const analysisResults = await analyzeImage(imageToAnalyze, description, apiKey);
-      setResults(analysisResults);
+      // Analyze all selected images concurrently
+      const analysisPromises = selectedImages.map(imageUri =>
+        analyzeImage(imageUri, description, apiKey)
+      );
+
+      const analysisResults = await Promise.all(analysisPromises);
+
+      // Flatten the array of arrays into a single list of food items
+      const allItems = analysisResults.flat();
+
+      setResults(allItems);
     } catch (err: any) {
       console.error(err);
       const errorMessage =
-        err.message || 'Failed to analyze image. Please check your API key and try again.';
+        err.message || 'Failed to analyze images. Please check your API key and try again.';
       setError(errorMessage);
       Alert.alert('Analysis Error', errorMessage);
     } finally {

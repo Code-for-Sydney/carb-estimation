@@ -32,6 +32,9 @@ export async function analyzeImage(
     const prompt = `
     Analyze this image of food (which may be a plate or a menu).
     Identify all distinct food items present.
+    
+    IMPORTANT: If the image shows a single plate or meal composed of multiple components (e.g. a main dish with sides like steak and fries), group them as a SINGLE item (e.g. "Steak with Fries") and list the components in the ingredients breakdown. Only return multiple items if there are clearly distinct separate meals or dishes (e.g. multiple plates, or a menu with different options).
+
     For each item, estimate:
     1. The carbohydrate content in grams per standard serving.
     2. The Glycemic Index (GI).
