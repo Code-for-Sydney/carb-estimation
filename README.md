@@ -4,19 +4,13 @@ AI-powered food analysis application for estimating carbohydrate content and gly
 
 ## Project Structure
 
-This repository contains two versions of the application:
+This repository contains the mobile version of the application:
 
 ### 📱 [carb-estimation-mobile](./carb-estimation-mobile)
 React Native mobile app built with Expo
 - iOS and Android support
 - Camera and gallery image picker
 - Native mobile UI/UX
-
-### 🌐 [carb-estimation-web](./carb-estimation-web)
-React web application built with Vite
-- Modern web interface
-- Drag-and-drop image upload
-- Responsive design with Tailwind CSS
 
 ## Features
 
@@ -33,13 +27,6 @@ React web application built with Vite
 cd carb-estimation-mobile
 npm install
 npx expo start
-```
-
-### Web App
-```bash
-cd carb-estimation-web
-npm install
-npm run dev
 ```
 
 ## Requirements
