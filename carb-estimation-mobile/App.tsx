@@ -142,7 +142,11 @@ export default function App() {
           ) : (
             <>
               {view === 'history' ? (
-                <MealLogList logs={mealLogs} onBack={() => setView('analyze')} />
+                <MealLogList
+                  logs={mealLogs}
+                  onBack={() => setView('analyze')}
+                  onUpdate={handleToggleHistory}
+                />
               ) : (
                 <>
                   <View style={styles.card}>
