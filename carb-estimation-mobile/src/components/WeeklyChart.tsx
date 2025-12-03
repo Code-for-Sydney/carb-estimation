@@ -25,18 +25,18 @@ export function WeeklyChart({ logs }: WeeklyChartProps) {
     const dailyTotals = days.map(day => {
         const dayStr = day.toDateString();
         const dayLogs = logs.filter(log => new Date(log.date).toDateString() === dayStr);
-        return dayLogs.reduce((sum, log) => sum + log.totalCarbs, 0);
+        return dayLogs.reduce((sum, log) => sum + log.totalCalories, 0);
     });
 
-    const maxCarbs = Math.max(...dailyTotals, 100); // Minimum 100g scale
+    const maxVal = Math.max(...dailyTotals, 2000); // Minimum 2000 kcal scale
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Last 7 Days (Carbs)</Text>
+            <Text style={styles.title}>Last 7 Days (Calories)</Text>
             <View style={styles.chart}>
                 {days.map((day, index) => {
-                    const carbs = dailyTotals[index];
-                    const heightPercentage = (carbs / maxCarbs) * 100;
+                    const value = dailyTotals[index];
+                    const heightPercentage = (value / maxVal) * 100;
                     const isToday = index === 6;
 
                     return (
@@ -55,7 +55,7 @@ export function WeeklyChart({ logs }: WeeklyChartProps) {
                             <Text style={[styles.dayLabel, isToday && styles.todayLabel]}>
                                 {day.toLocaleDateString(undefined, { weekday: 'narrow' })}
                             </Text>
-                            <Text style={styles.valueLabel}>{Math.round(carbs)}</Text>
+                            <Text style={styles.valueLabel}>{Math.round(value)}</Text>
                         </View>
                     );
                 })}

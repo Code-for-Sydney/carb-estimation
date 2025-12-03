@@ -89,12 +89,12 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }
                                     </View>
                                     <View style={styles.itemRight}>
                                         <View style={styles.statRow}>
-                                            <Text style={styles.carbsValue}>{item.carbs}g</Text>
-                                            <Text style={styles.carbsLabel}>CARBS</Text>
+                                            <Text style={styles.primaryValue}>{item.calories}</Text>
+                                            <Text style={styles.primaryLabel}>KCAL</Text>
                                         </View>
                                         <View style={styles.statRow}>
-                                            <Text style={styles.caloriesValue}>{item.calories}</Text>
-                                            <Text style={styles.caloriesLabel}>KCAL</Text>
+                                            <Text style={styles.secondaryValue}>{item.carbs}g</Text>
+                                            <Text style={styles.secondaryLabel}>CARBS</Text>
                                         </View>
                                         {onSaveItem && (
                                             <TouchableOpacity
@@ -132,8 +132,8 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }
                                                     <View key={ingredientIndex} style={styles.ingredientRow}>
                                                         <Text style={styles.ingredientName}>{ingredient.name}</Text>
                                                         <View style={styles.ingredientStats}>
-                                                            <Text style={styles.ingredientCarbs}>{ingredient.carbs}g carbs</Text>
-                                                            <Text style={styles.ingredientCalories}>{ingredient.calories} kcal</Text>
+                                                            <Text style={styles.ingredientPrimary}>{ingredient.calories} kcal</Text>
+                                                            <Text style={styles.ingredientSecondary}>{ingredient.carbs}g carbs</Text>
                                                             {onRemoveIngredient && (
                                                                 <TouchableOpacity
                                                                     onPress={() => onRemoveIngredient(index, ingredientIndex)}
@@ -146,7 +146,6 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }
                                                         </View>
                                                     </View>
                                                 ))}
-
                                             </View>
                                         )}
                                     </>
@@ -259,12 +258,12 @@ const styles = StyleSheet.create({
     itemRight: {
         alignItems: 'flex-end',
     },
-    carbsValue: {
+    primaryValue: {
         fontSize: 24,
         fontWeight: 'bold',
         color: colors.slate[900],
     },
-    carbsLabel: {
+    primaryLabel: {
         fontSize: 10,
         color: colors.slate[500],
         fontWeight: '600',
@@ -274,12 +273,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginBottom: 4,
     },
-    caloriesValue: {
+    secondaryValue: {
         fontSize: 18,
         fontWeight: '600',
         color: colors.slate[700],
     },
-    caloriesLabel: {
+    secondaryLabel: {
         fontSize: 10,
         color: colors.slate[500],
         fontWeight: '600',
@@ -331,7 +330,7 @@ const styles = StyleSheet.create({
         color: colors.slate[700],
         flex: 1,
     },
-    ingredientCarbs: {
+    ingredientPrimary: {
         fontSize: 14,
         fontWeight: '500',
         color: colors.slate[900],
@@ -340,7 +339,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: spacing.sm,
     },
-    ingredientCalories: {
+    ingredientSecondary: {
         fontSize: 14,
         color: colors.slate[500],
     },

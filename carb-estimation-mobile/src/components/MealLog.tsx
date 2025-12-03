@@ -86,8 +86,8 @@ export function MealLogList({ logs, onBack, onUpdate }: MealLogListProps) {
                                             {new Date(log.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </Text>
                                         <View style={styles.totals}>
-                                            <Text style={styles.totalCarbs}>{Math.round(log.totalCarbs)}g carbs</Text>
-                                            <Text style={styles.totalCalories}>{Math.round(log.totalCalories)} kcal</Text>
+                                            <Text style={styles.primaryTotal}>{Math.round(log.totalCalories)} kcal</Text>
+                                            <Text style={styles.secondaryTotal}>{Math.round(log.totalCarbs)}g carbs</Text>
                                         </View>
                                         <TouchableOpacity
                                             onPress={() => handleDelete(log.id)}
@@ -193,12 +193,12 @@ const styles = StyleSheet.create({
     deleteButton: {
         padding: 4,
     },
-    totalCarbs: {
+    primaryTotal: {
         fontSize: 14,
         fontWeight: '600',
         color: colors.slate[900],
     },
-    totalCalories: {
+    secondaryTotal: {
         fontSize: 14,
         color: colors.slate[600],
     },
