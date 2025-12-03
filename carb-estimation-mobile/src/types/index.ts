@@ -12,3 +12,11 @@ export interface FoodItem {
     confidence: number; // 0-1
     ingredients?: Ingredient[]; // optional breakdown of ingredients
 }
+
+export interface MealLog {
+    id: string;
+    date: string; // ISO string
+    items: FoodItem[];
+    totalCarbs: number;
+    totalCalories: number;
+}

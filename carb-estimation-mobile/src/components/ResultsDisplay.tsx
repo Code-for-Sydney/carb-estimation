@@ -6,9 +6,10 @@ import { colors, spacing, borderRadius } from '../styles/theme';
 
 interface ResultsDisplayProps {
     items: FoodItem[];
+    onSave?: () => void;
 }
 
-export function ResultsDisplay({ items }: ResultsDisplayProps) {
+export function ResultsDisplay({ items, onSave }: ResultsDisplayProps) {
     const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
 
     const toggleExpanded = (index: number) => {
@@ -143,6 +144,13 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                     ingredients and portion sizes. Always consult with a healthcare professional for medical advice.
                 </Text>
             </View>
+
+            {onSave && (
+                <TouchableOpacity style={styles.saveButton} onPress={onSave} activeOpacity={0.8}>
+                    <Ionicons name="save-outline" size={20} color={colors.white} />
+                    <Text style={styles.saveButtonText}>Save to Log</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 }
@@ -327,5 +335,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.blue[700],
         lineHeight: 20,
+    },
+    saveButton: {
+        backgroundColor: colors.emerald[600],
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: spacing.sm,
+        padding: spacing.md,
+        borderRadius: borderRadius.lg,
+    },
+    saveButtonText: {
+        color: colors.white,
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

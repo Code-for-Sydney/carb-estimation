@@ -7,8 +7,10 @@ import { ImageUpload } from './src/components/ImageUpload';
 import { AnalysisForm } from './src/components/AnalysisForm';
 import { ResultsDisplay } from './src/components/ResultsDisplay';
 import { ApiKeyInput } from './src/components/ApiKeyInput';
+import { MealLogList } from './src/components/MealLog';
 import { analyzeImage } from './src/services/gemini';
-import type { FoodItem } from './src/types';
+import { saveMeal, getMealLogs } from './src/services/storage';
+import type { FoodItem, MealLog } from './src/types';
 import { colors, spacing, borderRadius } from './src/styles/theme';
 
 const API_KEY_STORAGE_KEY = 'gemini_api_key';
@@ -20,6 +22,8 @@ export default function App() {
   const [results, setResults] = useState<FoodItem[]>([]);
   const [apiKey, setApiKey] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<'analyze' | 'history'>('analyze');
+  const [mealLogs, setMealLogs] = useState<MealLog[]>([]);
 
   useEffect(() => {
     loadApiKey();
@@ -95,10 +99,36 @@ export default function App() {
     }
   };
 
+  const handleSaveLog = async () => {
+    try {
+      await saveMeal(results);
+      Alert.alert('Success', 'Meal saved to log');
+      setResults([]);
+      setSelectedImages([]);
+      setDescription('');
+    } catch (err) {
+      Alert.alert('Error', 'Failed to save meal');
+    }
+  };
+
+  const handleToggleHistory = async () => {
+    if (view === 'analyze') {
+      const logs = await getMealLogs();
+      setMealLogs(logs);
+      setView('history');
+    } else {
+      setView('analyze');
+    }
+  };
+
   return (
     <>
       <StatusBar style="dark" />
-      <Layout onResetKey={apiKey ? handleResetKey : undefined} style={styles.status}>
+      <Layout
+        onResetKey={apiKey ? handleResetKey : undefined}
+        onToggleHistory={apiKey ? handleToggleHistory : undefined}
+        style={styles.status}
+      >
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>Analyze Your Meal</Text>
@@ -111,39 +141,45 @@ export default function App() {
             <ApiKeyInput onSave={handleSaveApiKey} />
           ) : (
             <>
-              <View style={styles.card}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>1. Upload Images</Text>
-                  <ImageUpload
-                    onImagesSelected={handleImagesSelected}
-                    selectedImages={selectedImages}
-                    onRemoveImage={handleRemoveImage}
-                  />
-                </View>
+              {view === 'history' ? (
+                <MealLogList logs={mealLogs} onBack={() => setView('analyze')} />
+              ) : (
+                <>
+                  <View style={styles.card}>
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>1. Upload Images</Text>
+                      <ImageUpload
+                        onImagesSelected={handleImagesSelected}
+                        selectedImages={selectedImages}
+                        onRemoveImage={handleRemoveImage}
+                      />
+                    </View>
 
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>2. Add Details</Text>
-                  <AnalysisForm
-                    description={description}
-                    onDescriptionChange={setDescription}
-                    onAnalyze={handleAnalyze}
-                    isAnalyzing={isAnalyzing}
-                    hasImages={selectedImages.length > 0}
-                  />
-                </View>
-              </View>
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>2. Add Details</Text>
+                      <AnalysisForm
+                        description={description}
+                        onDescriptionChange={setDescription}
+                        onAnalyze={handleAnalyze}
+                        isAnalyzing={isAnalyzing}
+                        hasImages={selectedImages.length > 0}
+                      />
+                    </View>
+                  </View>
 
-              {error && (
-                <View style={styles.errorContainer}>
-                  <Text style={styles.errorText}>{error}</Text>
-                </View>
+                  {error && (
+                    <View style={styles.errorContainer}>
+                      <Text style={styles.errorText}>{error}</Text>
+                    </View>
+                  )}
+
+                  <ResultsDisplay items={results} onSave={handleSaveLog} />
+                </>
               )}
-
-              <ResultsDisplay items={results} />
             </>
           )}
         </View>
-      </Layout >
+      </Layout>
     </>
   );
 }

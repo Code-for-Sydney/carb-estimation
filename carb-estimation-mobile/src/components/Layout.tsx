@@ -1,17 +1,19 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing } from '../styles/theme';
 
 interface LayoutProps {
     children: React.ReactNode;
     onResetKey?: () => void;
+    onToggleHistory?: () => void;
+    style?: ViewStyle;
 }
 
-export function Layout({ children, onResetKey }: LayoutProps) {
+export function Layout({ children, onResetKey, onToggleHistory, style }: LayoutProps) {
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, style]}>
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
                     <View style={styles.iconContainer}>
@@ -19,12 +21,19 @@ export function Layout({ children, onResetKey }: LayoutProps) {
                     </View>
                     <Text style={styles.title}>CarbEstimate AI</Text>
                 </View>
-                {onResetKey && (
-                    <TouchableOpacity onPress={onResetKey} style={styles.settingsButton}>
-                        <Ionicons name="settings-outline" size={20} color={colors.slate[600]} />
-                        <Text style={styles.settingsText}>Change API Key</Text>
-                    </TouchableOpacity>
-                )}
+                <View style={styles.headerRight}>
+                    {onResetKey && (
+                        <TouchableOpacity onPress={onResetKey} style={styles.settingsButton}>
+                            <Ionicons name="settings-outline" size={20} color={colors.slate[600]} />
+                            <Text style={styles.settingsText}>Change API Key</Text>
+                        </TouchableOpacity>
+                    )}
+                    {onToggleHistory && (
+                        <TouchableOpacity onPress={onToggleHistory} style={styles.historyButton}>
+                            <Ionicons name="time-outline" size={24} color={colors.slate[600]} />
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
 
             <ScrollView style={styles.main} contentContainerStyle={styles.mainContent}>
@@ -36,7 +45,7 @@ export function Layout({ children, onResetKey }: LayoutProps) {
                     © {new Date().getFullYear()} CarbEstimate AI. For informational purposes only.
                 </Text>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
@@ -61,6 +70,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: spacing.sm,
     },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: spacing.md,
+    },
     iconContainer: {
         backgroundColor: colors.emerald[500],
         padding: spacing.sm,
@@ -80,6 +94,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: colors.slate[600],
+    },
+    historyButton: {
+        padding: spacing.xs,
     },
     main: {
         flex: 1,
