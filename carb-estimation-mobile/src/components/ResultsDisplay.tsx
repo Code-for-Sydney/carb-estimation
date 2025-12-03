@@ -8,9 +8,10 @@ interface ResultsDisplayProps {
     items: FoodItem[];
     onSave?: () => void;
     onRemoveIngredient?: (itemIndex: number, ingredientIndex: number) => void;
+    onSaveItem?: (index: number) => void;
 }
 
-export function ResultsDisplay({ items, onSave, onRemoveIngredient }: ResultsDisplayProps) {
+export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }: ResultsDisplayProps) {
     const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
 
     const toggleExpanded = (index: number) => {
@@ -95,6 +96,15 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient }: ResultsDis
                                             <Text style={styles.caloriesValue}>{item.calories}</Text>
                                             <Text style={styles.caloriesLabel}>KCAL</Text>
                                         </View>
+                                        {onSaveItem && (
+                                            <TouchableOpacity
+                                                onPress={() => onSaveItem(index)}
+                                                style={styles.itemSaveButton}
+                                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                            >
+                                                <Ionicons name="save-outline" size={20} color={colors.emerald[600]} />
+                                            </TouchableOpacity>
+                                        )}
                                     </View>
                                 </View>
 
@@ -274,6 +284,10 @@ const styles = StyleSheet.create({
         color: colors.slate[500],
         fontWeight: '600',
         letterSpacing: 0.5,
+    },
+    itemSaveButton: {
+        marginTop: spacing.sm,
+        padding: 4,
     },
     expandButton: {
         flexDirection: 'row',

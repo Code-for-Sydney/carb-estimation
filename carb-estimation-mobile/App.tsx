@@ -139,6 +139,16 @@ export default function App() {
     }
   };
 
+  const handleSaveItem = async (index: number) => {
+    try {
+      const item = results[index];
+      await saveMeal([item]);
+      Alert.alert('Success', 'Item saved to log');
+    } catch (err) {
+      Alert.alert('Error', 'Failed to save item');
+    }
+  };
+
   return (
     <>
       <StatusBar style="dark" />
@@ -199,6 +209,7 @@ export default function App() {
                     items={results}
                     onSave={handleSaveLog}
                     onRemoveIngredient={handleRemoveIngredient}
+                    onSaveItem={handleSaveItem}
                   />
                 </>
               )}
