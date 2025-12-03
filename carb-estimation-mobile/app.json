@@ -27,9 +27,10 @@
       },
       "package": "com.carbestimate.app",
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -45,6 +46,11 @@
           "cameraPermission": "This app needs access to your camera to take photos of food for analysis."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "75a36de4-c03a-4176-a340-f7830fa3c8fb"
+      }
+    }
   }
 }

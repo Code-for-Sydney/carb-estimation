@@ -37,32 +37,35 @@ export async function analyzeImage(
 
     For each item, estimate:
     1. The carbohydrate content in grams per standard serving.
-    2. The Glycemic Index (GI).
-    3. A confidence score (0.0 to 1.0) for your identification.
-    4. A breakdown of ingredients with their individual carb values (if applicable).
+    2. The estimated calories (kcal) per standard serving.
+    3. The Glycemic Index (GI).
+    4. A confidence score (0.0 to 1.0) for your identification.
+    5. A breakdown of ingredients with their individual carb and calorie values (if applicable).
 
     Context provided by user: "${description}"
 
     Return ONLY a valid JSON array with objects containing these fields:
     - name (string)
     - carbs (number) - total carbs for the item
+    - calories (number) - total calories for the item
     - gi (number)
     - confidence (number)
-    - ingredients (optional array of objects with "name" and "carbs" fields) - breakdown of ingredients
+    - ingredients (optional array of objects with "name", "carbs", and "calories" fields) - breakdown of ingredients
 
     Example format:
     [
       { 
         "name": "Burger", 
         "carbs": 45, 
+        "calories": 550,
         "gi": 60, 
         "confidence": 0.95,
         "ingredients": [
-          { "name": "Bun", "carbs": 30 },
-          { "name": "Patty", "carbs": 0 },
-          { "name": "Cheese", "carbs": 2 },
-          { "name": "Sauce", "carbs": 8 },
-          { "name": "Vegetables", "carbs": 5 }
+          { "name": "Bun", "carbs": 30, "calories": 150 },
+          { "name": "Patty", "carbs": 0, "calories": 250 },
+          { "name": "Cheese", "carbs": 2, "calories": 100 },
+          { "name": "Sauce", "carbs": 8, "calories": 40 },
+          { "name": "Vegetables", "carbs": 5, "calories": 10 }
         ]
       }
     ]

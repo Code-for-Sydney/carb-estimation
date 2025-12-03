@@ -85,8 +85,14 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                                         </View>
                                     </View>
                                     <View style={styles.itemRight}>
-                                        <Text style={styles.carbsValue}>{item.carbs}g</Text>
-                                        <Text style={styles.carbsLabel}>CARBS</Text>
+                                        <View style={styles.statRow}>
+                                            <Text style={styles.carbsValue}>{item.carbs}g</Text>
+                                            <Text style={styles.carbsLabel}>CARBS</Text>
+                                        </View>
+                                        <View style={styles.statRow}>
+                                            <Text style={styles.caloriesValue}>{item.calories}</Text>
+                                            <Text style={styles.caloriesLabel}>KCAL</Text>
+                                        </View>
                                     </View>
                                 </View>
 
@@ -113,7 +119,10 @@ export function ResultsDisplay({ items }: ResultsDisplayProps) {
                                                 {item.ingredients!.map((ingredient, ingredientIndex) => (
                                                     <View key={ingredientIndex} style={styles.ingredientRow}>
                                                         <Text style={styles.ingredientName}>{ingredient.name}</Text>
-                                                        <Text style={styles.ingredientCarbs}>{ingredient.carbs}g</Text>
+                                                        <View style={styles.ingredientStats}>
+                                                            <Text style={styles.ingredientCarbs}>{ingredient.carbs}g carbs</Text>
+                                                            <Text style={styles.ingredientCalories}>{ingredient.calories} kcal</Text>
+                                                        </View>
                                                     </View>
                                                 ))}
 
@@ -233,6 +242,21 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         letterSpacing: 0.5,
     },
+    statRow: {
+        alignItems: 'flex-end',
+        marginBottom: 4,
+    },
+    caloriesValue: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: colors.slate[700],
+    },
+    caloriesLabel: {
+        fontSize: 10,
+        color: colors.slate[500],
+        fontWeight: '600',
+        letterSpacing: 0.5,
+    },
     expandButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -279,6 +303,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: colors.slate[900],
+    },
+    ingredientStats: {
+        flexDirection: 'row',
+        gap: spacing.sm,
+    },
+    ingredientCalories: {
+        fontSize: 14,
+        color: colors.slate[500],
     },
 
     disclaimer: {
