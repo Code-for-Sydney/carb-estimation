@@ -121,6 +121,24 @@ export default function App() {
     }
   };
 
+  const handleRemoveIngredient = (itemIndex: number, ingredientIndex: number) => {
+    const newResults = [...results];
+    const item = newResults[itemIndex];
+
+    if (item.ingredients && item.ingredients[ingredientIndex]) {
+      const ingredient = item.ingredients[ingredientIndex];
+
+      // Update totals
+      item.carbs = Math.max(0, item.carbs - ingredient.carbs);
+      item.calories = Math.max(0, (item.calories || 0) - (ingredient.calories || 0));
+
+      // Remove ingredient
+      item.ingredients.splice(ingredientIndex, 1);
+
+      setResults(newResults);
+    }
+  };
+
   return (
     <>
       <StatusBar style="dark" />
@@ -177,7 +195,11 @@ export default function App() {
                     </View>
                   )}
 
-                  <ResultsDisplay items={results} onSave={handleSaveLog} />
+                  <ResultsDisplay
+                    items={results}
+                    onSave={handleSaveLog}
+                    onRemoveIngredient={handleRemoveIngredient}
+                  />
                 </>
               )}
             </>

@@ -7,9 +7,10 @@ import { colors, spacing, borderRadius } from '../styles/theme';
 interface ResultsDisplayProps {
     items: FoodItem[];
     onSave?: () => void;
+    onRemoveIngredient?: (itemIndex: number, ingredientIndex: number) => void;
 }
 
-export function ResultsDisplay({ items, onSave }: ResultsDisplayProps) {
+export function ResultsDisplay({ items, onSave, onRemoveIngredient }: ResultsDisplayProps) {
     const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
 
     const toggleExpanded = (index: number) => {
@@ -123,6 +124,15 @@ export function ResultsDisplay({ items, onSave }: ResultsDisplayProps) {
                                                         <View style={styles.ingredientStats}>
                                                             <Text style={styles.ingredientCarbs}>{ingredient.carbs}g carbs</Text>
                                                             <Text style={styles.ingredientCalories}>{ingredient.calories} kcal</Text>
+                                                            {onRemoveIngredient && (
+                                                                <TouchableOpacity
+                                                                    onPress={() => onRemoveIngredient(index, ingredientIndex)}
+                                                                    style={styles.removeIngredientButton}
+                                                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                                                >
+                                                                    <Ionicons name="close-circle" size={20} color={colors.red[600]} />
+                                                                </TouchableOpacity>
+                                                            )}
                                                         </View>
                                                     </View>
                                                 ))}
@@ -319,6 +329,9 @@ const styles = StyleSheet.create({
     ingredientCalories: {
         fontSize: 14,
         color: colors.slate[500],
+    },
+    removeIngredientButton: {
+        marginLeft: spacing.xs,
     },
 
     disclaimer: {
