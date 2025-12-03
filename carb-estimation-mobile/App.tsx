@@ -161,7 +161,7 @@ export default function App() {
           <View style={styles.header}>
             <Text style={styles.title}>Analyze Your Meal</Text>
             <Text style={styles.subtitle}>
-              Upload a photo of your food or menu to get instant carbohydrate and GI estimates.
+              Upload a photo of your food or menu to get instant calorie, carbohydrate and GI estimates.
             </Text>
           </View>
 

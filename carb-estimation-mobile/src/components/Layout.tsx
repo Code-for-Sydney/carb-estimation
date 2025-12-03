@@ -19,7 +19,7 @@ export function Layout({ children, onResetKey, onToggleHistory, style }: LayoutP
                     <View style={styles.iconContainer}>
                         <Ionicons name="restaurant" size={24} color={colors.white} />
                     </View>
-                    <Text style={styles.title}>CarbEstimate AI</Text>
+                    <Text style={styles.title}>NutriLens</Text>
                 </View>
                 <View style={styles.headerRight}>
                     {onResetKey && (
@@ -42,7 +42,7 @@ export function Layout({ children, onResetKey, onToggleHistory, style }: LayoutP
 
             <View style={styles.footer}>
                 <Text style={styles.footerText}>
-                    © {new Date().getFullYear()} CarbEstimate AI. For informational purposes only.
+                    © {new Date().getFullYear()} NutriLens. For informational purposes only.
                 </Text>
             </View>
         </SafeAreaView >

@@ -1,4 +1,4 @@
-# Carb Estimation App
+# NutriLens
 
 AI-powered food analysis application for estimating carbohydrate content and glycemic index using Google Gemini AI.
 
