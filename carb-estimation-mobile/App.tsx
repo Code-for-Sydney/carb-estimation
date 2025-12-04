@@ -100,7 +100,13 @@ export default function App() {
       // Flatten the array of arrays into a single list of food items
       const allItems = analysisResults.flat();
 
-      setResults(allItems);
+      if (allItems.length === 0) {
+        // No food found - show the fun message
+        setError('Is it cake? 🍰');
+        Alert.alert('No Food Detected', 'Is it cake? 🍰\n\nNo food items were identified in the image.');
+      } else {
+        setResults(allItems);
+      }
     } catch (err: any) {
       console.error(err);
       const errorMessage =
