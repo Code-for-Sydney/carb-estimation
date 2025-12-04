@@ -57,3 +57,26 @@ export const clearLogs = async (): Promise<void> => {
         throw error;
     }
 };
+
+const ENERGY_UNIT_KEY = 'energy_unit';
+
+export type EnergyUnit = 'kcal' | 'kJ';
+
+export const saveEnergyUnit = async (unit: EnergyUnit): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(ENERGY_UNIT_KEY, unit);
+    } catch (error) {
+        console.error('Failed to save energy unit:', error);
+        throw error;
+    }
+};
+
+export const getEnergyUnit = async (): Promise<EnergyUnit> => {
+    try {
+        const unit = await AsyncStorage.getItem(ENERGY_UNIT_KEY);
+        return (unit as EnergyUnit) || 'kcal';
+    } catch (error) {
+        console.error('Failed to get energy unit:', error);
+        return 'kcal';
+    }
+};

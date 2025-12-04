@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { FoodItem } from '../types';
+import type { EnergyUnit } from '../services/storage';
+import { formatEnergy, getEnergyUnitLabel } from '../utils';
 import { colors, spacing, borderRadius } from '../styles/theme';
 
 interface ResultsDisplayProps {
     items: FoodItem[];
+    energyUnit: EnergyUnit;
     onSave?: () => void;
     onRemoveIngredient?: (itemIndex: number, ingredientIndex: number) => void;
     onSaveItem?: (index: number) => void;
 }
 
-export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }: ResultsDisplayProps) {
+export function ResultsDisplay({ items, energyUnit, onSave, onRemoveIngredient, onSaveItem }: ResultsDisplayProps) {
     const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
 
     const toggleExpanded = (index: number) => {
@@ -89,8 +92,8 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }
                                     </View>
                                     <View style={styles.itemRight}>
                                         <View style={styles.statRow}>
-                                            <Text style={styles.primaryValue}>{item.calories}</Text>
-                                            <Text style={styles.primaryLabel}>KCAL</Text>
+                                            <Text style={styles.primaryValue}>{Math.round(item.calories * (energyUnit === 'kJ' ? 4.184 : 1))}</Text>
+                                            <Text style={styles.primaryLabel}>{energyUnit.toUpperCase()}</Text>
                                         </View>
                                         <View style={styles.statRow}>
                                             <Text style={styles.secondaryValue}>{item.carbs}g</Text>
@@ -132,7 +135,7 @@ export function ResultsDisplay({ items, onSave, onRemoveIngredient, onSaveItem }
                                                     <View key={ingredientIndex} style={styles.ingredientRow}>
                                                         <Text style={styles.ingredientName}>{ingredient.name}</Text>
                                                         <View style={styles.ingredientStats}>
-                                                            <Text style={styles.ingredientPrimary}>{ingredient.calories} kcal</Text>
+                                                            <Text style={styles.ingredientPrimary}>{formatEnergy(ingredient.calories, energyUnit)}</Text>
                                                             <Text style={styles.ingredientSecondary}>{ingredient.carbs}g carbs</Text>
                                                             {onRemoveIngredient && (
                                                                 <TouchableOpacity

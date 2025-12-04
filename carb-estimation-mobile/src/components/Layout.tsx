@@ -6,12 +6,12 @@ import { colors, spacing } from '../styles/theme';
 
 interface LayoutProps {
     children: React.ReactNode;
-    onResetKey?: () => void;
     onToggleHistory?: () => void;
+    onToggleSettings?: () => void;
     style?: ViewStyle;
 }
 
-export function Layout({ children, onResetKey, onToggleHistory, style }: LayoutProps) {
+export function Layout({ children, onToggleHistory, onToggleSettings, style }: LayoutProps) {
     return (
         <SafeAreaView style={[styles.container, style]}>
             <View style={styles.header}>
@@ -22,15 +22,14 @@ export function Layout({ children, onResetKey, onToggleHistory, style }: LayoutP
                     <Text style={styles.title}>NutriLens</Text>
                 </View>
                 <View style={styles.headerRight}>
-                    {onResetKey && (
-                        <TouchableOpacity onPress={onResetKey} style={styles.settingsButton}>
-                            <Ionicons name="settings-outline" size={20} color={colors.slate[600]} />
-                            <Text style={styles.settingsText}>Change API Key</Text>
-                        </TouchableOpacity>
-                    )}
                     {onToggleHistory && (
                         <TouchableOpacity onPress={onToggleHistory} style={styles.historyButton}>
                             <Ionicons name="time-outline" size={24} color={colors.slate[600]} />
+                        </TouchableOpacity>
+                    )}
+                    {onToggleSettings && (
+                        <TouchableOpacity onPress={onToggleSettings} style={styles.historyButton}>
+                            <Ionicons name="settings-sharp" size={24} color={colors.slate[600]} />
                         </TouchableOpacity>
                     )}
                 </View>

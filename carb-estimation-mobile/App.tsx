@@ -8,8 +8,9 @@ import { AnalysisForm } from './src/components/AnalysisForm';
 import { ResultsDisplay } from './src/components/ResultsDisplay';
 import { ApiKeyInput } from './src/components/ApiKeyInput';
 import { MealLogList } from './src/components/MealLog';
+import { Settings } from './src/components/Settings';
 import { analyzeImage } from './src/services/gemini';
-import { saveMeal, getMealLogs } from './src/services/storage';
+import { saveMeal, getMealLogs, getEnergyUnit, saveEnergyUnit, type EnergyUnit } from './src/services/storage';
 import type { FoodItem, MealLog } from './src/types';
 import { colors, spacing, borderRadius } from './src/styles/theme';
 
@@ -22,11 +23,13 @@ export default function App() {
   const [results, setResults] = useState<FoodItem[]>([]);
   const [apiKey, setApiKey] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<'analyze' | 'history'>('analyze');
+  const [view, setView] = useState<'analyze' | 'history' | 'settings'>('analyze');
   const [mealLogs, setMealLogs] = useState<MealLog[]>([]);
+  const [energyUnit, setEnergyUnit] = useState<EnergyUnit>('kcal');
 
   useEffect(() => {
     loadApiKey();
+    loadEnergyUnit();
   }, []);
 
   const loadApiKey = async () => {
@@ -35,6 +38,15 @@ export default function App() {
       if (storedKey) setApiKey(storedKey);
     } catch (err) {
       console.error('Failed to load API key:', err);
+    }
+  };
+
+  const loadEnergyUnit = async () => {
+    try {
+      const unit = await getEnergyUnit();
+      setEnergyUnit(unit);
+    } catch (err) {
+      console.error('Failed to load energy unit:', err);
     }
   };
 
@@ -54,6 +66,7 @@ export default function App() {
       setApiKey('');
       setResults([]);
       setSelectedImages([]);
+      setView('analyze'); // Return to analyze view after reset
     } catch (err) {
       console.error('Failed to reset API key:', err);
     }
@@ -149,12 +162,29 @@ export default function App() {
     }
   };
 
+  const handleToggleSettings = () => {
+    if (view === 'analyze') {
+      setView('settings');
+    } else {
+      setView('analyze');
+    }
+  };
+
+  const handleEnergyUnitChange = async (unit: EnergyUnit) => {
+    try {
+      await saveEnergyUnit(unit);
+      setEnergyUnit(unit);
+    } catch (err) {
+      Alert.alert('Error', 'Failed to save preference');
+    }
+  };
+
   return (
     <>
       <StatusBar style="dark" />
       <Layout
-        onResetKey={apiKey ? handleResetKey : undefined}
         onToggleHistory={apiKey ? handleToggleHistory : undefined}
+        onToggleSettings={apiKey ? handleToggleSettings : undefined}
         style={styles.status}
       >
         <View style={styles.content}>
@@ -172,8 +202,18 @@ export default function App() {
               {view === 'history' ? (
                 <MealLogList
                   logs={mealLogs}
+                  energyUnit={energyUnit}
                   onBack={() => setView('analyze')}
                   onUpdate={handleToggleHistory}
+                />
+              ) : view === 'settings' ? (
+                <Settings
+                  energyUnit={energyUnit}
+                  apiKey={apiKey}
+                  onEnergyUnitChange={handleEnergyUnitChange}
+                  onApiKeyChange={handleSaveApiKey}
+                  onResetApiKey={handleResetKey}
+                  onBack={() => setView('analyze')}
                 />
               ) : (
                 <>
@@ -207,6 +247,7 @@ export default function App() {
 
                   <ResultsDisplay
                     items={results}
+                    energyUnit={energyUnit}
                     onSave={handleSaveLog}
                     onRemoveIngredient={handleRemoveIngredient}
                     onSaveItem={handleSaveItem}
