@@ -103,7 +103,6 @@ export default function App() {
       if (allItems.length === 0) {
         // No food found - show the fun message
         setError('Is it cake? 🍰');
-        Alert.alert('No Food Detected', 'Is it cake? 🍰\n\nNo food items were identified in the image.');
       } else {
         setResults(allItems);
       }
