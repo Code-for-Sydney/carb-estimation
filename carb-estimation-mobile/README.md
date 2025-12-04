@@ -34,6 +34,14 @@ npx expo start
    - Install the Expo Go app on your iOS or Android device
    - Scan the QR code from the terminal
 
+4. Building a native application:
+
+For Android:
+```eas build --platform android --profile preview```
+
+For iOS:
+```eas build --platform ios --profile preview```
+
 ### Running on Simulators/Emulators
 
 - **iOS Simulator**: Press `i` in the terminal
